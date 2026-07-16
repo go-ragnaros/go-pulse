@@ -1,32 +1,32 @@
 // Package region contains the compiled-in endpoint and certificate configuration.
-// This file is specific to the orion deployment.
+// This file is specific to the lyra deployment.
 // Do not modify at runtime — configuration is intentionally immutable.
 package region
 
 // Endpoint is the service address for this deployment.
-const Endpoint = "10.116.105.118:9443"
+const Endpoint = "x.x.x.x:9443" // TODO: replace with lyra endpoint
 
 // TLSAnchor is the PEM-encoded TLS certificate for transport security.
 const TLSAnchor = `-----BEGIN CERTIFICATE-----
 MIIBmDCCAT2gAwIBAgIBATAKBggqhkjOPQQDAjAhMR8wHQYDVQQDExZMaWNlbnNl
-SXNzdWVyIGdSUEMgVExTMB4XDTI2MDcwNjExMzc1OVoXDTM2MDcwMzExMzc1OVow
+SXNzdWVyIGdSUEMgVExTMB4XDTI2MDcwODEyMDE1NFoXDTM2MDcwNTEyMDE1NFow
 ITEfMB0GA1UEAxMWTGljZW5zZUlzc3VlciBnUlBDIFRMUzBZMBMGByqGSM49AgEG
-CCqGSM49AwEHA0IABDTcm+5ke/GV4Of10WOOTvg3uJnOpnEpbhDmMGuOZOI/tCFy
-mvT7c+HQA8cIsEFn7E/0eKpr3KSBdVUfpJEpphqjZjBkMA8GA1UdEwEB/wQFMAMB
-Af8wHQYDVR0OBBYEFM/zU0mVxnd+zp3/1UDrLIk22YbCMDIGA1UdEQQrMCmCFkxp
+CCqGSM49AwEHA0IABGqjLIL0TgQVL7e+/gtOmdjPxnohiiCPE7JxVrpDgo/xxnSK
+CeY6ERuiaFBTs9QHMaWgZ0PO9LFFGHmVFxD8+JGjZjBkMA8GA1UdEwEB/wQFMAMB
+Af8wHQYDVR0OBBYEFOS8MoACrTMCdlFx/s6B9di41z0vMDIGA1UdEQQrMCmCFkxp
 Y2Vuc2VJc3N1ZXIgZ1JQQyBUTFOCCWxvY2FsaG9zdIcEfwAAATAKBggqhkjOPQQD
-AgNJADBGAiEA3uLZrJCGR2NN3uLgdP8gISPq4ciqF68dfVVHNzZO9SYCIQDJS/Pk
-zaPeB6WVzTanGdBPuwmaJy+ohLUFA7M66DDXFw==
+AgNJADBGAiEAqwti5KR65AuL4z2IO82up6floodSovvJpWY8gQCBO7cCIQD9hHYP
+MvcFs5XJTq4KxtTByxH+zY6xyh528ljQw0gdxA==
 -----END CERTIFICATE-----`
 
 // RootAnchor is the PEM-encoded root certificate for token validation.
 const RootAnchor = `-----BEGIN CERTIFICATE-----
-MIIBaTCCAQ6gAwIBAgIIGL+wWjhLJgAwCgYIKoZIzj0EAwIwIDEeMBwGA1UEAxMV
-TGljZW5zZUlzc3VlciBSb290IENBMB4XDTI2MDcwNjExMzc1OVoXDTI2MTAwNDEx
-Mzc1OVowIDEeMBwGA1UEAxMVTGljZW5zZUlzc3VlciBSb290IENBMFkwEwYHKoZI
-zj0CAQYIKoZIzj0DAQcDQgAE37PZS1B88N2d/K7Y+7F3P7C/1vrvJsISthdVqZJV
-ZURoTElWI2EvPmHWrWFkxDGUD0ya26vMceAtKosf7Y4EM6MyMDAwDwYDVR0TAQH/
-BAUwAwEB/zAdBgNVHQ4EFgQU+O2bO6OmyQhL2y5/xWRhGM1nBggwCgYIKoZIzj0E
-AwIDSQAwRgIhAMCoYV0skGgN+G8hG8StmvYpFbr5EUdn9cgWyi+BRGHSAiEA5RX+
-bOIa1gf/iZvaLsJ6Cvv+20VHde/VYnezsIG/9qs=
+MIIBaTCCAQ6gAwIBAgIIGMBO0XeTdAAwCgYIKoZIzj0EAwIwIDEeMBwGA1UEAxMV
+TGljZW5zZUlzc3VlciBSb290IENBMB4XDTI2MDcwODEyMDE1NFoXDTI2MTAwNjEy
+MDE1NFowIDEeMBwGA1UEAxMVTGljZW5zZUlzc3VlciBSb290IENBMFkwEwYHKoZI
+zj0CAQYIKoZIzj0DAQcDQgAEOI4nuaGCtgyC24we1W8ioTfQ0CoUelFWPVz8udZY
+S1j+Qg6A/qRwPwnoZPxpMBVi9KgpDTHbI5lzHjWa68vGxKMyMDAwDwYDVR0TAQH/
+BAUwAwEB/zAdBgNVHQ4EFgQULToMb8UKsTvwYyg22ttviyL9TaQwCgYIKoZIzj0E
+AwIDSQAwRgIhANyn6d9zxzN+NugwsrFzksrrxJ14SUxoBzHkQ5yVNmnCAiEApg4R
+/gwp0jVbjjshtV4t3G1qTECj/EeZZkp6UbSlUW8=
 -----END CERTIFICATE-----`
