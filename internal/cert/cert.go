@@ -81,6 +81,9 @@ func (c *LocalToken) RequestBytes() ([]byte, error) {
 
 func (c *LocalToken) Update(certPEM []byte) error {
 	block, _ := pem.Decode(certPEM)
+	if block == nil {
+		return fmt.Errorf("%w: server returned invalid PEM", ErrInvalidToken)
+	}
 	cert, err := x509.ParseCertificate(block.Bytes)
 	if err != nil {
 		return err
@@ -116,13 +119,19 @@ func (c *LocalToken) generatePlaceholder() (*LocalToken, error) {
 }
 
 func (c *LocalToken) load(st tokenState) error {
-	block, _ := pem.Decode(st.CertPEM)
-	cert, err := x509.ParseCertificate(block.Bytes)
+	certBlock, _ := pem.Decode(st.CertPEM)
+	if certBlock == nil {
+		return fmt.Errorf("%w: stored cert PEM invalid", ErrInvalidToken)
+	}
+	cert, err := x509.ParseCertificate(certBlock.Bytes)
 	if err != nil {
 		return err
 	}
-	block, _ = pem.Decode(st.KeyPEM)
-	key, err := x509.ParseECPrivateKey(block.Bytes)
+	keyBlock, _ := pem.Decode(st.KeyPEM)
+	if keyBlock == nil {
+		return fmt.Errorf("%w: stored key PEM invalid", ErrInvalidToken)
+	}
+	key, err := x509.ParseECPrivateKey(keyBlock.Bytes)
 	if err != nil {
 		return err
 	}

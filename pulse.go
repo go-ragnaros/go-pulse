@@ -78,6 +78,13 @@ func Guard(cfg Config) {
 }
 
 func buildMonitor(cfg Config) *checker.Monitor {
+	if cfg.StatePath == "" {
+		log.Fatal("[pulse] Config.StatePath must not be empty")
+	}
+	if len(cfg.NodeSecret) == 0 {
+		log.Fatal("[pulse] Config.NodeSecret must not be empty")
+	}
+
 	tlsCreds := parseTLSCreds(region.TLSAnchor)
 	anchor := parseAnchor(region.RootAnchor)
 
