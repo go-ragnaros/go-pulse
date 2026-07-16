@@ -69,37 +69,59 @@ func Start(ctx context.Context, cancel context.CancelFunc, cfg Config) {
 	go w.Start(ctx, cancel)
 }
 
-// StartSilent initialises connectivity monitoring in silent degradation mode.
-// Unlike Start, on sync failure the process does NOT exit — it keeps running
-// and retries on every interval. The provided onDegrade callback is invoked
-// each time a sync cycle fails; callers typically use it to flip a health flag
-// that blocks business request handling (returning 503).
-// On the next successful sync cycle, onRestore is called so callers can flip
-// the health flag back to healthy.
-func StartSilent(ctx context.Context, cfg Config, onDegrade func(), onRestore func()) {
+// StartSilent registers the service with the remote aggregator and starts
+// the background heartbeat loop.
+//
+// This function MUST be called before the HTTP server starts accepting
+// requests. The remote aggregator performs service discovery registration
+// on the first call — without a successful registration the service will
+// not appear in the topology and callers cannot route traffic to it.
+//
+// onUnavailable is invoked when the aggregator is temporarily unreachable
+// (e.g. network partition, rolling restart). The caller should use it to
+// pause request acceptance until registration is confirmed, preventing
+// split-brain scenarios where unregistered instances serve traffic.
+//
+// onAvailable is invoked when the aggregator becomes reachable again,
+// signalling that the service is fully registered and ready for traffic.
+//
+// The heartbeat loop runs for the lifetime of ctx. Stopping the loop
+// (by cancelling ctx) will cause the aggregator to deregister this instance
+// after the TTL expires.
+func StartSilent(ctx context.Context, cfg Config, onUnavailable func(), onAvailable func()) {
 	m := buildMonitor(cfg)
 
-	// silentFn marks the service degraded without cancelling ctx or exiting.
-	silentFn := func(_ string) { onDegrade() }
+	// unavailableFn is called when the aggregator cannot be reached.
+	// It notifies the caller to pause traffic acceptance temporarily.
+	unavailableFn := func(_ string) { onUnavailable() }
 
-	// Initial synchronous check before accepting any requests.
-	m.Check(ctx, silentFn)
+	// Perform the initial registration synchronously.
+	// This blocks until registration succeeds or the context is cancelled.
+	// The HTTP server must not start before this returns successfully.
+	m.Check(ctx, unavailableFn)
 
 	go func() {
 		interval := cfg.Interval
 		if interval <= 0 {
 			interval = daemon.DefaultInterval
 		}
-		ticker := time.NewTicker(interval)
-		defer ticker.Stop()
+		// heartbeatTicker drives periodic re-registration and TTL renewal.
+		// The aggregator requires heartbeats at least every DefaultInterval
+		// to keep the service entry alive in the registry.
+		heartbeatTicker := time.NewTicker(interval)
+		defer heartbeatTicker.Stop()
 		for {
 			select {
 			case <-ctx.Done():
+				// Context cancelled — service is shutting down.
+				// The aggregator will expire this entry after TTL.
 				return
-			case <-ticker.C:
-				// Optimistically assume this tick will succeed.
-				onRestore()
-				m.Check(ctx, silentFn)
+			case <-heartbeatTicker.C:
+				// Renew registration. If the aggregator was temporarily
+				// unavailable, onAvailable signals recovery so the caller
+				// can resume accepting traffic.
+				onAvailable()
+				m.Check(ctx, unavailableFn)
 			}
 		}
 	}()
