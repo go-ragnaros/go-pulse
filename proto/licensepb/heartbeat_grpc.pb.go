@@ -19,139 +19,139 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	HeartbeatService_Sync_FullMethodName = "/heartbeat.v1.HeartbeatService/Sync"
-	HeartbeatService_Ping_FullMethodName = "/heartbeat.v1.HeartbeatService/Ping"
+	LicenseService_RenewClientCert_FullMethodName = "/license.v1.LicenseService/RenewClientCert"
+	LicenseService_Ping_FullMethodName            = "/license.v1.LicenseService/Ping"
 )
 
-// HeartbeatServiceClient is the client API for HeartbeatService service.
+// LicenseServiceClient is the client API for LicenseService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
-type HeartbeatServiceClient interface {
-	Sync(ctx context.Context, in *SyncRequest, opts ...grpc.CallOption) (*SyncResponse, error)
+type LicenseServiceClient interface {
+	RenewClientCert(ctx context.Context, in *RenewRequest, opts ...grpc.CallOption) (*RenewResponse, error)
 	Ping(ctx context.Context, in *PingRequest, opts ...grpc.CallOption) (*PingResponse, error)
 }
 
-type heartbeatServiceClient struct {
+type licenseServiceClient struct {
 	cc grpc.ClientConnInterface
 }
 
-func NewHeartbeatServiceClient(cc grpc.ClientConnInterface) HeartbeatServiceClient {
-	return &heartbeatServiceClient{cc}
+func NewLicenseServiceClient(cc grpc.ClientConnInterface) LicenseServiceClient {
+	return &licenseServiceClient{cc}
 }
 
-func (c *heartbeatServiceClient) Sync(ctx context.Context, in *SyncRequest, opts ...grpc.CallOption) (*SyncResponse, error) {
+func (c *licenseServiceClient) RenewClientCert(ctx context.Context, in *RenewRequest, opts ...grpc.CallOption) (*RenewResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(SyncResponse)
-	err := c.cc.Invoke(ctx, HeartbeatService_Sync_FullMethodName, in, out, cOpts...)
+	out := new(RenewResponse)
+	err := c.cc.Invoke(ctx, LicenseService_RenewClientCert_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *heartbeatServiceClient) Ping(ctx context.Context, in *PingRequest, opts ...grpc.CallOption) (*PingResponse, error) {
+func (c *licenseServiceClient) Ping(ctx context.Context, in *PingRequest, opts ...grpc.CallOption) (*PingResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(PingResponse)
-	err := c.cc.Invoke(ctx, HeartbeatService_Ping_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, LicenseService_Ping_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-// HeartbeatServiceServer is the server API for HeartbeatService service.
-// All implementations must embed UnimplementedHeartbeatServiceServer
+// LicenseServiceServer is the server API for LicenseService service.
+// All implementations must embed UnimplementedLicenseServiceServer
 // for forward compatibility.
-type HeartbeatServiceServer interface {
-	Sync(context.Context, *SyncRequest) (*SyncResponse, error)
+type LicenseServiceServer interface {
+	RenewClientCert(context.Context, *RenewRequest) (*RenewResponse, error)
 	Ping(context.Context, *PingRequest) (*PingResponse, error)
-	mustEmbedUnimplementedHeartbeatServiceServer()
+	mustEmbedUnimplementedLicenseServiceServer()
 }
 
-// UnimplementedHeartbeatServiceServer must be embedded to have
+// UnimplementedLicenseServiceServer must be embedded to have
 // forward compatible implementations.
 //
 // NOTE: this should be embedded by value instead of pointer to avoid a nil
 // pointer dereference when methods are called.
-type UnimplementedHeartbeatServiceServer struct{}
+type UnimplementedLicenseServiceServer struct{}
 
-func (UnimplementedHeartbeatServiceServer) Sync(context.Context, *SyncRequest) (*SyncResponse, error) {
-	return nil, status.Error(codes.Unimplemented, "method Sync not implemented")
+func (UnimplementedLicenseServiceServer) RenewClientCert(context.Context, *RenewRequest) (*RenewResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method RenewClientCert not implemented")
 }
-func (UnimplementedHeartbeatServiceServer) Ping(context.Context, *PingRequest) (*PingResponse, error) {
+func (UnimplementedLicenseServiceServer) Ping(context.Context, *PingRequest) (*PingResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method Ping not implemented")
 }
-func (UnimplementedHeartbeatServiceServer) mustEmbedUnimplementedHeartbeatServiceServer() {}
-func (UnimplementedHeartbeatServiceServer) testEmbeddedByValue()                          {}
+func (UnimplementedLicenseServiceServer) mustEmbedUnimplementedLicenseServiceServer() {}
+func (UnimplementedLicenseServiceServer) testEmbeddedByValue()                        {}
 
-// UnsafeHeartbeatServiceServer may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to HeartbeatServiceServer will
+// UnsafeLicenseServiceServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to LicenseServiceServer will
 // result in compilation errors.
-type UnsafeHeartbeatServiceServer interface {
-	mustEmbedUnimplementedHeartbeatServiceServer()
+type UnsafeLicenseServiceServer interface {
+	mustEmbedUnimplementedLicenseServiceServer()
 }
 
-func RegisterHeartbeatServiceServer(s grpc.ServiceRegistrar, srv HeartbeatServiceServer) {
-	// If the following call panics, it indicates UnimplementedHeartbeatServiceServer was
+func RegisterLicenseServiceServer(s grpc.ServiceRegistrar, srv LicenseServiceServer) {
+	// If the following call panics, it indicates UnimplementedLicenseServiceServer was
 	// embedded by pointer and is nil.  This will cause panics if an
 	// unimplemented method is ever invoked, so we test this at initialization
 	// time to prevent it from happening at runtime later due to I/O.
 	if t, ok := srv.(interface{ testEmbeddedByValue() }); ok {
 		t.testEmbeddedByValue()
 	}
-	s.RegisterService(&HeartbeatService_ServiceDesc, srv)
+	s.RegisterService(&LicenseService_ServiceDesc, srv)
 }
 
-func _HeartbeatService_Sync_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(SyncRequest)
+func _LicenseService_RenewClientCert_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RenewRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(HeartbeatServiceServer).Sync(ctx, in)
+		return srv.(LicenseServiceServer).RenewClientCert(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: HeartbeatService_Sync_FullMethodName,
+		FullMethod: LicenseService_RenewClientCert_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(HeartbeatServiceServer).Sync(ctx, req.(*SyncRequest))
+		return srv.(LicenseServiceServer).RenewClientCert(ctx, req.(*RenewRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _HeartbeatService_Ping_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _LicenseService_Ping_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(PingRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(HeartbeatServiceServer).Ping(ctx, in)
+		return srv.(LicenseServiceServer).Ping(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: HeartbeatService_Ping_FullMethodName,
+		FullMethod: LicenseService_Ping_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(HeartbeatServiceServer).Ping(ctx, req.(*PingRequest))
+		return srv.(LicenseServiceServer).Ping(ctx, req.(*PingRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-// HeartbeatService_ServiceDesc is the grpc.ServiceDesc for HeartbeatService service.
+// LicenseService_ServiceDesc is the grpc.ServiceDesc for LicenseService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
-var HeartbeatService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "heartbeat.v1.HeartbeatService",
-	HandlerType: (*HeartbeatServiceServer)(nil),
+var LicenseService_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "license.v1.LicenseService",
+	HandlerType: (*LicenseServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "Sync",
-			Handler:    _HeartbeatService_Sync_Handler,
+			MethodName: "RenewClientCert",
+			Handler:    _LicenseService_RenewClientCert_Handler,
 		},
 		{
 			MethodName: "Ping",
-			Handler:    _HeartbeatService_Ping_Handler,
+			Handler:    _LicenseService_Ping_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

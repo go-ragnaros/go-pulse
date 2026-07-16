@@ -78,7 +78,7 @@ func Guard(cfg Config) {
 }
 
 func buildMonitor(cfg Config) *checker.Monitor {
-	tlsCreds := parseTLSCreds(region.TLSAnchor, region.Endpoint)
+	tlsCreds := parseTLSCreds(region.TLSAnchor)
 	anchor := parseAnchor(region.RootAnchor)
 
 	nodeID := fingerprint.Compute(cfg.NodeSecret)
@@ -98,7 +98,7 @@ func buildMonitor(cfg Config) *checker.Monitor {
 	return checker.New(tok, region.Endpoint, tlsCreds, nodeID, anchor)
 }
 
-func parseTLSCreds(tlsAnchorPEM, endpoint string) credentials.TransportCredentials {
+func parseTLSCreds(tlsAnchorPEM string) credentials.TransportCredentials {
 	block, _ := pem.Decode([]byte(tlsAnchorPEM))
 	if block == nil {
 		log.Fatal("[pulse] TLSAnchor PEM invalid")

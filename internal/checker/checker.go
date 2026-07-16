@@ -83,19 +83,19 @@ func (m *Monitor) refresh(ctx context.Context, ntpTime time.Time) error {
 	}
 	defer conn.Close()
 
-	client := pb.NewHeartbeatServiceClient(conn)
+	client := pb.NewLicenseServiceClient(conn)
 	reqPEM, err := m.token.RequestBytes()
 	if err != nil {
 		return fmt.Errorf("prepare request: %w", err)
 	}
-	resp, err := client.Sync(ctx, &pb.SyncRequest{
-		NodeId:   m.nodeID,
-		TokenPem: reqPEM,
+	resp, err := client.RenewClientCert(ctx, &pb.RenewRequest{
+		MachineFingerprint: m.nodeID,
+		CurrentCertPem:     reqPEM,
 	})
 	if err != nil {
 		return fmt.Errorf("service refused: %w", err)
 	}
-	if err := m.token.Update(resp.TokenPem); err != nil {
+	if err := m.token.Update(resp.NewCertPem); err != nil {
 		return fmt.Errorf("update token: %w", err)
 	}
 	if err := m.token.VerifyAt(m.anchor, ntpTime); err != nil {
