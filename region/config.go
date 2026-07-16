@@ -4,7 +4,7 @@
 package region
 
 // Endpoint is the service address for this deployment.
-const Endpoint = "x.x.x.x:9443" // TODO: replace with lyra endpoint
+const Endpoint = "10.77.15.129:9443"
 
 // TLSAnchor is the PEM-encoded TLS certificate for transport security.
 const TLSAnchor = `-----BEGIN CERTIFICATE-----
