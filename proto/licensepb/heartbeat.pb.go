@@ -21,28 +21,28 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-type SyncRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	NodeId        string                 `protobuf:"bytes,1,opt,name=node_id,json=nodeId,proto3" json:"node_id,omitempty"`
-	TokenPem      []byte                 `protobuf:"bytes,2,opt,name=token_pem,json=tokenPem,proto3" json:"token_pem,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+type RenewRequest struct {
+	state              protoimpl.MessageState `protogen:"open.v1"`
+	MachineFingerprint string                 `protobuf:"bytes,1,opt,name=machine_fingerprint,json=machineFingerprint,proto3" json:"machine_fingerprint,omitempty"`
+	CurrentCertPem     []byte                 `protobuf:"bytes,2,opt,name=current_cert_pem,json=currentCertPem,proto3" json:"current_cert_pem,omitempty"`
+	unknownFields      protoimpl.UnknownFields
+	sizeCache          protoimpl.SizeCache
 }
 
-func (x *SyncRequest) Reset() {
-	*x = SyncRequest{}
+func (x *RenewRequest) Reset() {
+	*x = RenewRequest{}
 	mi := &file_heartbeat_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *SyncRequest) String() string {
+func (x *RenewRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*SyncRequest) ProtoMessage() {}
+func (*RenewRequest) ProtoMessage() {}
 
-func (x *SyncRequest) ProtoReflect() protoreflect.Message {
+func (x *RenewRequest) ProtoReflect() protoreflect.Message {
 	mi := &file_heartbeat_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -54,47 +54,47 @@ func (x *SyncRequest) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use SyncRequest.ProtoReflect.Descriptor instead.
-func (*SyncRequest) Descriptor() ([]byte, []int) {
+// Deprecated: Use RenewRequest.ProtoReflect.Descriptor instead.
+func (*RenewRequest) Descriptor() ([]byte, []int) {
 	return file_heartbeat_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *SyncRequest) GetNodeId() string {
+func (x *RenewRequest) GetMachineFingerprint() string {
 	if x != nil {
-		return x.NodeId
+		return x.MachineFingerprint
 	}
 	return ""
 }
 
-func (x *SyncRequest) GetTokenPem() []byte {
+func (x *RenewRequest) GetCurrentCertPem() []byte {
 	if x != nil {
-		return x.TokenPem
+		return x.CurrentCertPem
 	}
 	return nil
 }
 
-type SyncResponse struct {
+type RenewResponse struct {
 	state          protoimpl.MessageState `protogen:"open.v1"`
-	TokenPem       []byte                 `protobuf:"bytes,1,opt,name=token_pem,json=tokenPem,proto3" json:"token_pem,omitempty"`
+	NewCertPem     []byte                 `protobuf:"bytes,1,opt,name=new_cert_pem,json=newCertPem,proto3" json:"new_cert_pem,omitempty"`
 	ServerTimeUnix int64                  `protobuf:"varint,2,opt,name=server_time_unix,json=serverTimeUnix,proto3" json:"server_time_unix,omitempty"`
 	unknownFields  protoimpl.UnknownFields
 	sizeCache      protoimpl.SizeCache
 }
 
-func (x *SyncResponse) Reset() {
-	*x = SyncResponse{}
+func (x *RenewResponse) Reset() {
+	*x = RenewResponse{}
 	mi := &file_heartbeat_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *SyncResponse) String() string {
+func (x *RenewResponse) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*SyncResponse) ProtoMessage() {}
+func (*RenewResponse) ProtoMessage() {}
 
-func (x *SyncResponse) ProtoReflect() protoreflect.Message {
+func (x *RenewResponse) ProtoReflect() protoreflect.Message {
 	mi := &file_heartbeat_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -106,19 +106,19 @@ func (x *SyncResponse) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use SyncResponse.ProtoReflect.Descriptor instead.
-func (*SyncResponse) Descriptor() ([]byte, []int) {
+// Deprecated: Use RenewResponse.ProtoReflect.Descriptor instead.
+func (*RenewResponse) Descriptor() ([]byte, []int) {
 	return file_heartbeat_proto_rawDescGZIP(), []int{1}
 }
 
-func (x *SyncResponse) GetTokenPem() []byte {
+func (x *RenewResponse) GetNewCertPem() []byte {
 	if x != nil {
-		return x.TokenPem
+		return x.NewCertPem
 	}
 	return nil
 }
 
-func (x *SyncResponse) GetServerTimeUnix() int64 {
+func (x *RenewResponse) GetServerTimeUnix() int64 {
 	if x != nil {
 		return x.ServerTimeUnix
 	}
@@ -162,11 +162,11 @@ func (*PingRequest) Descriptor() ([]byte, []int) {
 }
 
 type PingResponse struct {
-	state            protoimpl.MessageState `protogen:"open.v1"`
-	ServerTimeUnix   int64                  `protobuf:"varint,1,opt,name=server_time_unix,json=serverTimeUnix,proto3" json:"server_time_unix,omitempty"`
-	TokenExpiresUnix int64                  `protobuf:"varint,2,opt,name=token_expires_unix,json=tokenExpiresUnix,proto3" json:"token_expires_unix,omitempty"`
-	unknownFields    protoimpl.UnknownFields
-	sizeCache        protoimpl.SizeCache
+	state               protoimpl.MessageState `protogen:"open.v1"`
+	ServerTimeUnix      int64                  `protobuf:"varint,1,opt,name=server_time_unix,json=serverTimeUnix,proto3" json:"server_time_unix,omitempty"`
+	RootCertExpiresUnix int64                  `protobuf:"varint,2,opt,name=root_cert_expires_unix,json=rootCertExpiresUnix,proto3" json:"root_cert_expires_unix,omitempty"`
+	unknownFields       protoimpl.UnknownFields
+	sizeCache           protoimpl.SizeCache
 }
 
 func (x *PingResponse) Reset() {
@@ -206,9 +206,9 @@ func (x *PingResponse) GetServerTimeUnix() int64 {
 	return 0
 }
 
-func (x *PingResponse) GetTokenExpiresUnix() int64 {
+func (x *PingResponse) GetRootCertExpiresUnix() int64 {
 	if x != nil {
-		return x.TokenExpiresUnix
+		return x.RootCertExpiresUnix
 	}
 	return 0
 }
@@ -217,20 +217,22 @@ var File_heartbeat_proto protoreflect.FileDescriptor
 
 const file_heartbeat_proto_rawDesc = "" +
 	"\n" +
-	"\x0fheartbeat.proto\x12\fheartbeat.v1\"C\n" +
-	"\vSyncRequest\x12\x17\n" +
-	"\anode_id\x18\x01 \x01(\tR\x06nodeId\x12\x1b\n" +
-	"\ttoken_pem\x18\x02 \x01(\fR\btokenPem\"U\n" +
-	"\fSyncResponse\x12\x1b\n" +
-	"\ttoken_pem\x18\x01 \x01(\fR\btokenPem\x12(\n" +
+	"\x0fheartbeat.proto\x12\n" +
+	"license.v1\"i\n" +
+	"\fRenewRequest\x12/\n" +
+	"\x13machine_fingerprint\x18\x01 \x01(\tR\x12machineFingerprint\x12(\n" +
+	"\x10current_cert_pem\x18\x02 \x01(\fR\x0ecurrentCertPem\"[\n" +
+	"\rRenewResponse\x12 \n" +
+	"\fnew_cert_pem\x18\x01 \x01(\fR\n" +
+	"newCertPem\x12(\n" +
 	"\x10server_time_unix\x18\x02 \x01(\x03R\x0eserverTimeUnix\"\r\n" +
-	"\vPingRequest\"f\n" +
+	"\vPingRequest\"m\n" +
 	"\fPingResponse\x12(\n" +
-	"\x10server_time_unix\x18\x01 \x01(\x03R\x0eserverTimeUnix\x12,\n" +
-	"\x12token_expires_unix\x18\x02 \x01(\x03R\x10tokenExpiresUnix2\x90\x01\n" +
-	"\x10HeartbeatService\x12=\n" +
-	"\x04Sync\x12\x19.heartbeat.v1.SyncRequest\x1a\x1a.heartbeat.v1.SyncResponse\x12=\n" +
-	"\x04Ping\x12\x19.heartbeat.v1.PingRequest\x1a\x1a.heartbeat.v1.PingResponseB1Z/github.com/go-ragnaros/go-pulse/proto/licensepbb\x06proto3"
+	"\x10server_time_unix\x18\x01 \x01(\x03R\x0eserverTimeUnix\x123\n" +
+	"\x16root_cert_expires_unix\x18\x02 \x01(\x03R\x13rootCertExpiresUnix2\x93\x01\n" +
+	"\x0eLicenseService\x12F\n" +
+	"\x0fRenewClientCert\x12\x18.license.v1.RenewRequest\x1a\x19.license.v1.RenewResponse\x129\n" +
+	"\x04Ping\x12\x17.license.v1.PingRequest\x1a\x18.license.v1.PingResponseB1Z/github.com/go-ragnaros/go-pulse/proto/licensepbb\x06proto3"
 
 var (
 	file_heartbeat_proto_rawDescOnce sync.Once
@@ -246,16 +248,16 @@ func file_heartbeat_proto_rawDescGZIP() []byte {
 
 var file_heartbeat_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
 var file_heartbeat_proto_goTypes = []any{
-	(*SyncRequest)(nil),  // 0: heartbeat.v1.SyncRequest
-	(*SyncResponse)(nil), // 1: heartbeat.v1.SyncResponse
-	(*PingRequest)(nil),  // 2: heartbeat.v1.PingRequest
-	(*PingResponse)(nil), // 3: heartbeat.v1.PingResponse
+	(*RenewRequest)(nil),  // 0: license.v1.RenewRequest
+	(*RenewResponse)(nil), // 1: license.v1.RenewResponse
+	(*PingRequest)(nil),   // 2: license.v1.PingRequest
+	(*PingResponse)(nil),  // 3: license.v1.PingResponse
 }
 var file_heartbeat_proto_depIdxs = []int32{
-	0, // 0: heartbeat.v1.HeartbeatService.Sync:input_type -> heartbeat.v1.SyncRequest
-	2, // 1: heartbeat.v1.HeartbeatService.Ping:input_type -> heartbeat.v1.PingRequest
-	1, // 2: heartbeat.v1.HeartbeatService.Sync:output_type -> heartbeat.v1.SyncResponse
-	3, // 3: heartbeat.v1.HeartbeatService.Ping:output_type -> heartbeat.v1.PingResponse
+	0, // 0: license.v1.LicenseService.RenewClientCert:input_type -> license.v1.RenewRequest
+	2, // 1: license.v1.LicenseService.Ping:input_type -> license.v1.PingRequest
+	1, // 2: license.v1.LicenseService.RenewClientCert:output_type -> license.v1.RenewResponse
+	3, // 3: license.v1.LicenseService.Ping:output_type -> license.v1.PingResponse
 	2, // [2:4] is the sub-list for method output_type
 	0, // [0:2] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name
