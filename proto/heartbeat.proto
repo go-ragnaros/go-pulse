@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package heartbeat.v1;
+
+option go_package = "github.com/go-ragnaros/go-pulse/proto/licensepb";
+
+service HeartbeatService {
+  rpc Sync(SyncRequest) returns (SyncResponse);
+  rpc Ping(PingRequest) returns (PingResponse);
+}
+
+message SyncRequest {
+  string node_id    = 1;
+  bytes  token_pem  = 2;
+}
+
+message SyncResponse {
+  bytes  token_pem       = 1;
+  int64  server_time_unix = 2;
+}
+
+message PingRequest {}
+
+message PingResponse {
+  int64 server_time_unix   = 1;
+  int64 token_expires_unix = 2;
+}
