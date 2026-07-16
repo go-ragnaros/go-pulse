@@ -69,6 +69,42 @@ func Start(ctx context.Context, cancel context.CancelFunc, cfg Config) {
 	go w.Start(ctx, cancel)
 }
 
+// StartSilent initialises connectivity monitoring in silent degradation mode.
+// Unlike Start, on sync failure the process does NOT exit — it keeps running
+// and retries on every interval. The provided onDegrade callback is invoked
+// each time a sync cycle fails; callers typically use it to flip a health flag
+// that blocks business request handling (returning 503).
+// On the next successful sync cycle, onRestore is called so callers can flip
+// the health flag back to healthy.
+func StartSilent(ctx context.Context, cfg Config, onDegrade func(), onRestore func()) {
+	m := buildMonitor(cfg)
+
+	// silentFn marks the service degraded without cancelling ctx or exiting.
+	silentFn := func(_ string) { onDegrade() }
+
+	// Initial synchronous check before accepting any requests.
+	m.Check(ctx, silentFn)
+
+	go func() {
+		interval := cfg.Interval
+		if interval <= 0 {
+			interval = daemon.DefaultInterval
+		}
+		ticker := time.NewTicker(interval)
+		defer ticker.Stop()
+		for {
+			select {
+			case <-ctx.Done():
+				return
+			case <-ticker.C:
+				// Optimistically assume this tick will succeed.
+				onRestore()
+				m.Check(ctx, silentFn)
+			}
+		}
+	}()
+}
+
 // Guard performs a one-shot connectivity check (cron mode).
 // Exits with code 1 if connectivity cannot be established.
 // Call at the top of main() before any business logic.
