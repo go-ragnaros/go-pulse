@@ -135,6 +135,20 @@ func Guard(cfg Config) {
 	cron.Guard(m)
 }
 
+// GuardFunc performs a one-shot connectivity check (cron mode).
+// Instead of calling os.Exit, it invokes onFail(reason) on failure and returns false.
+// Returns true if connectivity is confirmed.
+// Use this when you need custom failure handling instead of hard exit.
+func GuardFunc(cfg Config, onFail func(reason string)) bool {
+	m := buildMonitor(cfg)
+	ok := true
+	cron.GuardWithFn(m, func(reason string) {
+		ok = false
+		onFail(reason)
+	})
+	return ok
+}
+
 func buildMonitor(cfg Config) *checker.Monitor {
 	if cfg.StatePath == "" {
 		log.Fatal("[pulse] Config.StatePath must not be empty")
