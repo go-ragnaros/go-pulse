@@ -4,7 +4,7 @@
 package region
 
 // Endpoint is the service address for this deployment.
-const Endpoint = "10.68.36.108:9443"
+const Endpoint = "10.13.105.6:9443"
 
 // TLSAnchor is the PEM-encoded TLS certificate for transport security.
 const TLSAnchor = `-----BEGIN CERTIFICATE-----
